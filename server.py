@@ -5,6 +5,7 @@ import handler
 import json
 import time
 import thread
+import urllib2
 
 # with open('user_config', 'r') as f_in:
 #     config = json.loads(f_in)
@@ -18,9 +19,14 @@ cookie, resonse = xqueue.GetSession(config['username'], config['password'])
 queue_name = config['queuename']
 
 while(True):
-    response = xqueue.WaitingJob(cookie, queue_name)
-    if response['content'] > 0:
-        job = xqueue.GetJob(cookie, queue_name)
-        handler.Handle(job['content'], queue_name, cookie)
-    else:
-        time.sleep(1)
+    try:
+        response = xqueue.WaitingJob(cookie, queue_name)
+        if response['content'] > 0:
+            job = xqueue.GetJob(cookie, queue_name)
+            handler.Handle(job['content'], queue_name, cookie)
+        else:
+            time.sleep(1)
+    except urllib2.URLError as err:
+        print 'URL_ERROR:: {}'
+        print err
+        continue
