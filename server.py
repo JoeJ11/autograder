@@ -13,6 +13,7 @@ config = {
     'password':'513WLQL5YIMJO7R8EZB3ZUXXSHBI9H5F',
     'queuename':'Tsinghua-Thu64100033X-studio'
 }
+
 cookie, resonse = xqueue.GetSession(config['username'], config['password'])
 queue_name = config['queuename']
 
