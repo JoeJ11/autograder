@@ -9,7 +9,7 @@ import commands
 import codecs
 
 WORKING_STAGE = 'development'
-WORK_ROOT = '/Users/Joe/Study/Project/autograder/'
+WORK_ROOT = '/home/ubuntu/autograder/'
 
 def Handle(job, queue_name, cookie):
     print str(datetime.datetime.now())

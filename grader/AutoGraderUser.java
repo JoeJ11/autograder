@@ -42,6 +42,9 @@ public class AutoGraderUser
 			num++;
 			// System.out.println(t);
 			String[] pair = t.split("    ");
+			if (pair.length == 1 ) { 
+				pair = t.split("\t");
+			}
 			// for (int j = 0; j != pair.length; j++) {
 			// 	 System.out.println(pair[j]);
 			// }

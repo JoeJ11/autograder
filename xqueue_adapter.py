@@ -23,7 +23,7 @@ def WaitingJob(cookie, queue_name):
     request = urllib2.Request(XQUEUE_BASIC_URL+"/xqueue/get_queuelen?"+data)
     request.add_header('cookie', cookie)
     r = urllib2.urlopen(request).read()
-    print "WAITING_JOB::{}".format(r)
+    # print "WAITING_JOB::{}".format(r)
     return json.loads(r)
 
 def GetJob(cookie, queue_name):
