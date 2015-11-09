@@ -6,6 +6,7 @@ import json
 import time
 import thread
 import urllib2
+import sys
 
 # with open('user_config', 'r') as f_in:
 #     config = json.loads(f_in)
@@ -29,4 +30,7 @@ while(True):
     except urllib2.URLError as err:
         print 'URL_ERROR:: {}'
         print err
+        continue
+    except:
+        _error_response(json.loads(job['content']), cookie, sys.exc_info()[0])
         continue
