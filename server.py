@@ -23,8 +23,8 @@ while(True):
     try:
         response = xqueue.WaitingJob(cookie, queue_name)
         if response['content'] > 0:
-            job = xqueue.GetJob(cookie, queue_name)
-            handler.Handle(job['content'], queue_name, cookie)
+            tem_job = xqueue.GetJob(cookie, queue_name)
+            handler.Handle(tem_job['content'], queue_name, cookie)
         else:
             time.sleep(1)
     except urllib2.URLError as err:
@@ -32,5 +32,6 @@ while(True):
         print err
         continue
     except:
-        _error_response(json.loads(job['content']), cookie, sys.exc_info()[0])
+        print sys.exc_info()[0]
+        handler.Error_response(cookie, json.loads(tem_job['content']), '<p>Error! Please check your repo.</p>')
         continue
