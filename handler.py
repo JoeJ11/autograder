@@ -64,6 +64,14 @@ def _generate_response(job):
 def _response(cookie, job, body):
     xqueue.ReturnResult(cookie, job['xqueue_header'], body)
 
+def _error_response(cookie, job, msg):
+    body = {
+        'correct':False,
+        'score':0,
+        'msg':msg
+    }
+    xqueue.ReturnResult(cookie, job['xqueue_header'], body)
+
 def _remove_working_dir(dir_name):
     os.chdir('..')
     shutil.rmtree(dir_name)
