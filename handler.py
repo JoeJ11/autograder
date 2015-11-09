@@ -10,6 +10,7 @@ import codecs
 
 WORKING_STAGE = 'development'
 WORK_ROOT = '/Users/Joe/Study/Project/autograder/'
+CONFIGS = False
 
 def Handle(job, queue_name, cookie):
     print str(datetime.datetime.now())
@@ -26,7 +27,7 @@ def Handle(job, queue_name, cookie):
     print '\t experiment ID: {}'.format(exp_id)
     print '\t file_path: {}'.format(file_path)
     status = _get_remote_file(student_name, exp_id, file_path)
-    grader_response = _grade('AutoGraderUser', dir_name)
+    grader_response = _grade(exp_id, dir_name)
     response = _generate_response(job)
     _response(cookie, job, response)
     _remove_working_dir(dir_name)
@@ -68,9 +69,22 @@ def _remove_working_dir(dir_name):
     shutil.rmtree(dir_name)
     os.chdir('..')
 
-def _grade(grader_name, dir_name):
+def _grade(exp_id, dir_name):
+    exp_config = _get_config(exp_id)
     os.chdir('{}grader'.format(WORK_ROOT))
-    output = commands.getoutput('java {} ../development/{}/'.format(grader_name, dir_name))
+    output = commands.getoutput('{} ../development/{}/'.format(exp_config['cmd'], dir_name))
     os.chdir('../development/{}'.format(dir_name))
     print '\t Script output:'
     print output
+
+def _get_config(exp_id):
+    exp_id = str(exp_id)
+    if CONFIGS:
+        return CONFIGS[exp_id]
+    else:
+        tem_dir = os.path.abspath(os.curdir)
+        os.chdir(WORK_ROOT)
+        with open('grader_config.json', 'r') as f_in:
+            CONFIGS = json.load(f_in)
+        os.chdir(tem_dir)
+        return CONFIGS[exp_id]
