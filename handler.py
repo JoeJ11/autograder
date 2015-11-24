@@ -9,7 +9,7 @@ import commands
 import codecs
 
 WORKING_STAGE = 'development'
-WORK_ROOT = '/home/ubuntu/autograder/'
+WORK_ROOT = '/home/ubuntu/autograder'
 
 def Handle(job, queue_name, cookie):
     print str(datetime.datetime.now())
@@ -32,7 +32,7 @@ def Handle(job, queue_name, cookie):
     _remove_working_dir(dir_name)
 
 def _create_working_dir(dir_name):
-    os.chdir('./{}'.format(WORKING_STAGE))
+    os.chdir('{}/{}'.format(WORK_ROOT, WORKING_STAGE))
     if dir_name in os.listdir('.'):
         shutil.rmtree(dir_name)
     os.mkdir(dir_name)
@@ -72,17 +72,17 @@ def Error_response(cookie, job, msg):
     xqueue.ReturnResult(cookie, job['xqueue_header'], body)
 
 def _remove_working_dir(dir_name):
-    os.chdir('..')
+    os.chdir('{}/{}'.format(WORK_ROOT, WORKING_STAGE))
     shutil.rmtree(dir_name)
-    os.chdir('..')
+    os.chdir('{}'.format(WORK_ROOT))
 
 def _grade(exp_id, dir_name):
     exp_config = _get_config(exp_id)
-    os.chdir('{}grader'.format(WORK_ROOT))
-    cmd = '{} ../development/{}/'.format(exp_config['cmd'], dir_name)
+    os.chdir('{}/grader'.format(WORK_ROOT))
+    cmd = '{} {}/{}/{}/'.format(exp_config['cmd'], WORK_ROOT, WORKING_STAGE, dir_name)
     print '\t grade with {}'.format(cmd)
     output = commands.getoutput(cmd)
-    os.chdir('../development/{}'.format(dir_name))
+    os.chdir('{}/{}/{}'.format(WORK_ROOT, WORKING_STAGE, dir_name))
     print '\t Script output:'
     print output
 
