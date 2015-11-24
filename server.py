@@ -7,6 +7,8 @@ import time
 import thread
 import urllib2
 import sys
+import os
+import shutil
 
 # with open('user_config', 'r') as f_in:
 #     config = json.loads(f_in)
@@ -18,11 +20,19 @@ config = {
 
 cookie, resonse = xqueue.GetSession(config['username'], config['password'])
 queue_name = config['queuename']
-
+counter = 0
 while(True):
     try:
+        counter += 1
+        if counter == 60*60:
+            print 'Initialize working directory.'
+            os.chdir(handler.WORK_ROOT)
+            shutil.rmtree('{}/{}'.format(handler.WORK_ROOT, handler.WORKING_STAGE))
+            os.mkdir('{}/{}'.format(handler.WORK_ROOT, handler.WORKING_STAGE))
+
         response = xqueue.WaitingJob(cookie, queue_name)
         if response['content'] > 0:
+            counter = 0
             tem_job = xqueue.GetJob(cookie, queue_name)
             handler.Handle(tem_job['content'], queue_name, cookie)
         else:
