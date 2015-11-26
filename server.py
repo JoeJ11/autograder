@@ -18,10 +18,10 @@ config = {
     'queuename':'Tsinghua-Thu64100033X-studio'
 }
 
-cookie, resonse = xqueue.GetSession(config['username'], config['password'])
 queue_name = config['queuename']
 counter = 0
 while(True):
+    cookie, resonse = xqueue.GetSession(config['username'], config['password'])
     try:
         counter += 1
         if counter == 60*60:
